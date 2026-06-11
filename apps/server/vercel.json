@@ -1,5 +1,16 @@
 {
+  "version": 2,
   "installCommand": "npm install --include=dev",
-  "buildCommand": "cd ../.. && npx turbo build --filter=@cardeko/server",
-  "outputDirectory": "dist"
+  "builds": [
+    {
+      "src": "src/api/index.ts",
+      "use": "@vercel/node"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "/src/api/index.ts"
+    }
+  ]
 }
