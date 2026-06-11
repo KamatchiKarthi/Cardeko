@@ -1,0 +1,5 @@
+{
+  "installCommand": "npm install --include=dev",
+  "buildCommand": "cd ../.. && npx turbo build --filter=@cardeko/server",
+  "outputDirectory": "dist"
+}

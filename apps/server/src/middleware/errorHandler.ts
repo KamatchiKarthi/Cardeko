@@ -66,7 +66,7 @@ export const errorHandler: ErrorRequestHandler = (
   if (isValidationError(err)) {
     const errors = Object.values(err.errors).map((e) => ({
       field: e.path,
-      message: e.message,
+      message: (e as Error).message,
     }))
     return res.status(422).json({
       success: false,
