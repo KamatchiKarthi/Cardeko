@@ -37,3 +37,4 @@ connectDB().catch((err) => console.error('[App] DB init error:', err))
 
 export { app }
 export default app
+module.exports = app
