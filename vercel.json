@@ -1,6 +1,6 @@
 {
-  "buildCommand": "npm run build --workspace=apps/web",
+  "buildCommand": "npx turbo build --filter=@cardeko/web",
   "outputDirectory": "apps/web/dist",
-  "installCommand": "npm install",
+  "installCommand": "npm install --include=dev",
   "framework": null
 }
