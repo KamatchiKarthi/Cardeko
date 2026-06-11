@@ -16,7 +16,16 @@ import {
 } from './explore.constants'
 
 const BODY_TYPES: BodyType[] = [
-  'sedan', 'suv', 'hatchback', 'coupe', 'convertible', 'truck', 'van', 'wagon', 'minivan', 'crossover',
+  'sedan',
+  'suv',
+  'hatchback',
+  'coupe',
+  'convertible',
+  'truck',
+  'van',
+  'wagon',
+  'minivan',
+  'crossover',
 ]
 
 const FUEL_TYPES: FuelType[] = ['petrol', 'diesel', 'electric', 'hybrid', 'cng', 'lpg']

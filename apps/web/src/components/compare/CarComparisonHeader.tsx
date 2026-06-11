@@ -6,7 +6,7 @@ import Button from '@/components/ui/Button'
 import CarImage from '@/components/ui/CarImage'
 import { MAX_COMPARE_CARS } from '@/features/compare/compare.constants'
 import { useAppDispatch } from '@/store'
-import { removeFromShortlist } from '@/store/slices/shortlistSlice'
+import { removeFromCompare } from '@/store/slices/compareSlice'
 import {
   formatStartingPrice,
   getCarCardGradient,
@@ -14,12 +14,15 @@ import {
   getCarHeroImage,
 } from '@/utils/car.utils'
 
-interface CompareCarHeaderProps {
+interface CarComparisonHeaderProps {
   cars: ICar[]
   slotCount?: number
 }
 
-export default function CompareCarHeader({ cars, slotCount = MAX_COMPARE_CARS }: CompareCarHeaderProps) {
+export default function CarComparisonHeader({
+  cars,
+  slotCount = MAX_COMPARE_CARS,
+}: CarComparisonHeaderProps) {
   const dispatch = useAppDispatch()
   const slots = Array.from({ length: slotCount })
 
@@ -64,8 +67,8 @@ export default function CompareCarHeader({ cars, slotCount = MAX_COMPARE_CARS }:
                 variant="ghost"
                 size="sm"
                 className="absolute right-0 top-0 z-10 size-7 min-w-0 rounded-full p-0"
-                onClick={() => dispatch(removeFromShortlist(car._id))}
-                aria-label={`Remove ${displayName} from shortlist`}
+                onClick={() => dispatch(removeFromCompare(car._id))}
+                aria-label={`Remove ${displayName} from compare`}
               >
                 <HiXMark className="size-4" />
               </Button>

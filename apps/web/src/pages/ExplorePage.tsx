@@ -6,6 +6,7 @@ import { useSearchParams } from 'react-router-dom'
 import ExploreCarCard from '@/components/explore/ExploreCarCard'
 import ExploreCarListSkeleton from '@/components/explore/ExploreCarListSkeleton'
 import ExploreFilterSidebar from '@/components/explore/ExploreFilterSidebar'
+import ExploreShortlistBar from '@/components/explore/ExploreShortlistBar'
 import ExploreSortTabs from '@/components/explore/ExploreSortTabs'
 import HomeApiError from '@/components/home/HomeApiError'
 import Button from '@/components/ui/Button'
@@ -16,6 +17,7 @@ import {
 } from '@/features/explore/explore.constants'
 import {
   buildExploreSearchParams,
+  computeExploreMatchPercent,
   filtersToUrlSearchParams,
   parseExploreFiltersFromSearch,
   parseExploreSortFromSearch,
@@ -50,10 +52,7 @@ export default function ExplorePage() {
   const priceRangeMin = (homeStats?.priceRangeMinLakhs ?? 3) * 100_000
   const priceRangeMax = (homeStats?.priceRangeMaxLakhs ?? 50) * 100_000
 
-  const searchQuery = useMemo(
-    () => buildExploreSearchParams(filters, sortTab),
-    [filters, sortTab]
-  )
+  const searchQuery = useMemo(() => buildExploreSearchParams(filters, sortTab), [filters, sortTab])
 
   const { data, isLoading, isFetching, isError } = useGetCarsQuery(searchQuery)
 
@@ -62,8 +61,18 @@ export default function ExplorePage() {
     setSearchParams(nextParams, { replace: true })
   }, [filters, sortTab, setSearchParams])
 
-  const cars = data?.data ?? []
+  const cars = useMemo(() => data?.data ?? [], [data?.data])
   const totalCount = data?.total ?? 0
+
+  const displayedCars = useMemo(() => {
+    if (!quizComplete || sortTab !== 'best-match') return cars
+
+    return [...cars].sort(
+      (left, right) =>
+        computeExploreMatchPercent(right, filters, quizAnswers) -
+        computeExploreMatchPercent(left, filters, quizAnswers)
+    )
+  }, [cars, filters, quizAnswers, quizComplete, sortTab])
 
   const handleFiltersChange = (nextFilters: ExploreFilters) => {
     setFilters(nextFilters)
@@ -88,7 +97,8 @@ export default function ExplorePage() {
           <div>
             <h1 className="text-2xl font-bold text-text-primary sm:text-3xl">Explore cars</h1>
             <p className="mt-1 text-sm text-text-secondary">
-              Filter by budget, body type, fuel, and seating — then sort your shortlist.
+              Filter by budget, body type, fuel, and seating. Tap a card for full details — bookmark
+              to save for later.
             </p>
           </div>
 
@@ -127,6 +137,10 @@ export default function ExplorePage() {
               totalCount={totalCount}
             />
 
+            <div className="mt-4">
+              <ExploreShortlistBar />
+            </div>
+
             <div className="mt-5">
               {(isLoading || isFetching) && cars.length === 0 && <ExploreCarListSkeleton />}
 
@@ -145,16 +159,16 @@ export default function ExplorePage() {
                 </div>
               )}
 
-              {!isError && cars.length > 0 && (
+              {!isError && displayedCars.length > 0 && (
                 <div className="space-y-4">
-                  {cars.map((car, index) => (
+                  {displayedCars.map((car, index) => (
                     <ExploreCarCard
                       key={car._id}
                       car={car}
                       index={index}
                       filters={filters}
                       quizAnswers={quizComplete ? quizAnswers : null}
-                      showTrophyBanner={sortTab === 'best-match' && index === 0}
+                      showTrophyBanner={quizComplete && sortTab === 'best-match' && index === 0}
                     />
                   ))}
                 </div>

@@ -2,17 +2,14 @@ import type { IRecommendedCar, QuizAnswers } from '@cardeko/types'
 import { HiCheck, HiPlus } from 'react-icons/hi2'
 import { Link } from 'react-router-dom'
 
+import AddToCompareButton from '@/components/compare/AddToCompareButton'
 import Badge from '@/components/ui/Badge'
 import Button from '@/components/ui/Button'
 import Card from '@/components/ui/Card'
 import { getMatchReasons } from '@/features/quiz/recommend.utils'
 import { useAppDispatch, useAppSelector } from '@/store'
 import { addToShortlist, selectShortlistIds } from '@/store/slices/shortlistSlice'
-import {
-  formatStartingPrice,
-  getCarCardGradient,
-  getCarDisplayName,
-} from '@/utils/car.utils'
+import { formatStartingPrice, getCarCardGradient, getCarDisplayName } from '@/utils/car.utils'
 
 const RANK_STYLES = [
   { bg: 'bg-amber-500', icon: '🏆' },
@@ -105,7 +102,7 @@ export default function ShortlistResultCard({ car, rank, answers }: ShortlistRes
             ))}
           </div>
 
-          <div className="mt-4">
+          <div className="mt-4 flex flex-wrap gap-2">
             <Button
               type="button"
               variant={isShortlisted ? 'secondary' : 'primary'}
@@ -126,6 +123,7 @@ export default function ShortlistResultCard({ car, rank, answers }: ShortlistRes
                 </>
               )}
             </Button>
+            <AddToCompareButton carId={car._id} size="sm" />
           </div>
         </div>
       </div>

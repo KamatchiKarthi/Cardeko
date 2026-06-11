@@ -1,9 +1,9 @@
 import { HiOutlineBanknotes } from 'react-icons/hi2'
 
-import BudgetNetflixCard from './BudgetNetflixCard'
+import BudgetPortraitCard from './BudgetPortraitCard'
 import HomeApiError from './HomeApiError'
+import HomePortraitScroll from './HomePortraitScroll'
 import HomeSectionHeader from './HomeSectionHeader'
-import NetflixRowScroll from './NetflixRowScroll'
 
 import { useGetBudgetCarsQuery } from '@/features/cars/carsApi'
 
@@ -30,11 +30,11 @@ export default function BudgetPicks() {
         {isError && <HomeApiError />}
 
         {!isError && (
-          <NetflixRowScroll isLoading={isLoading} skeletonCount={6}>
+          <HomePortraitScroll isLoading={isLoading} skeletonCount={6}>
             {cars?.map((car, index) => (
-              <BudgetNetflixCard key={car._id} car={car} index={index} />
+              <BudgetPortraitCard key={car._id} car={car} index={index} />
             ))}
-          </NetflixRowScroll>
+          </HomePortraitScroll>
         )}
       </div>
     </section>

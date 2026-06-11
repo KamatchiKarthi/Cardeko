@@ -10,8 +10,8 @@ import CarReviewSummary from '@/components/car-detail/CarReviewSummary'
 import CarReviewsSection from '@/components/car-detail/CarReviewsSection'
 import CarWhyMatched from '@/components/car-detail/CarWhyMatched'
 import HomeApiError from '@/components/home/HomeApiError'
-import { useGetCarByIdQuery } from '@/features/cars/carsApi'
 import { aggregateReviewProsCons, buildReviewSummary } from '@/features/car-detail/car-detail.utils'
+import { useGetCarByIdQuery } from '@/features/cars/carsApi'
 import { useGetCarReviewsQuery } from '@/features/reviews/reviewsApi'
 
 export default function CarDetailPage() {

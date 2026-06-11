@@ -1,7 +1,7 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
 import { HiSparkles, HiArrowRight, HiMagnifyingGlass } from 'react-icons/hi2'
 import { MdOutlineExplore } from 'react-icons/md'
+import { Link } from 'react-router-dom'
 
 const POPULAR_CHIPS = [
   'Tata Nexon',
@@ -18,10 +18,8 @@ export default function HeroSection() {
   return (
     <section className="bg-brand-primary px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
       <div className="mx-auto grid w-full max-w-screen-xl grid-cols-1 items-center gap-12 lg:grid-cols-2">
-
         {/* ── Left ── */}
         <div className="flex flex-col items-start">
-
           {/* AI label */}
           <span className="mb-5 inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-white/10 px-3 py-1 text-xs font-semibold uppercase tracking-widest text-white/80">
             <HiSparkles className="size-3.5 text-brand-highlight" />
@@ -30,13 +28,14 @@ export default function HeroSection() {
 
           {/* Heading */}
           <h1 className="mb-4 text-4xl font-extrabold leading-tight tracking-tight text-white sm:text-5xl lg:text-[3.25rem]">
-            Confused about<br className="hidden sm:block" /> which car to buy?
+            Confused about
+            <br className="hidden sm:block" /> which car to buy?
           </h1>
 
           {/* Description */}
           <p className="mb-8 max-w-md text-base leading-relaxed text-slate-300 sm:text-lg">
-            Answer 5 quick questions and our AI builds a personalised shortlist
-            — matched to your budget, lifestyle, and fuel preference.
+            Answer 5 quick questions and our AI builds a personalised shortlist — matched to your
+            budget, lifestyle, and fuel preference.
           </p>
 
           {/* CTAs */}
@@ -64,13 +63,10 @@ export default function HeroSection() {
 
         {/* ── Right — dark search card ── */}
         <div className="w-full rounded-2xl border border-white/10 bg-[#0d1e38] p-6 shadow-xl shadow-black/30 sm:p-8">
-
           <p className="mb-1 text-sm font-semibold text-white/60 uppercase tracking-wider">
             Quick Search
           </p>
-          <p className="mb-4 text-lg font-bold text-white">
-            Find any car instantly
-          </p>
+          <p className="mb-4 text-lg font-bold text-white">Find any car instantly</p>
 
           {/* Search input */}
           <div className="relative">
@@ -111,7 +107,6 @@ export default function HeroSection() {
             Search Cars
           </button>
         </div>
-
       </div>
     </section>
   )

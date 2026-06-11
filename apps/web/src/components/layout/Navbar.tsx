@@ -1,18 +1,18 @@
-import { Link, NavLink } from 'react-router-dom'
+import { HiOutlineViewfinderCircle, HiOutlineBookmark, HiOutlineSquares2X2 } from 'react-icons/hi2'
 import { MdDirectionsCar } from 'react-icons/md'
-import { HiOutlineViewfinderCircle, HiOutlineSquares2X2, HiOutlineBookmark } from 'react-icons/hi2'
+import { Link, NavLink } from 'react-router-dom'
+
 import { useAppSelector } from '../../store'
-import { MAX_COMPARE_CARS } from '@/features/compare/compare.constants'
+import { selectCompareCount } from '../../store/slices/compareSlice'
 import { selectShortlistCount } from '../../store/slices/shortlistSlice'
 
 export default function Navbar() {
   const shortlistCount = useAppSelector(selectShortlistCount)
-  const compareCount = Math.min(shortlistCount, MAX_COMPARE_CARS)
+  const compareCount = useAppSelector(selectCompareCount)
 
   return (
     <header className="sticky top-0 z-50 border-b border-border bg-surface">
       <div className="container-page flex h-16 items-center justify-between">
-
         {/* Logo */}
         <Link to="/" className="flex items-center gap-2 text-brand-primary">
           <MdDirectionsCar className="size-7 text-brand-accent" />
@@ -23,13 +23,19 @@ export default function Navbar() {
 
         {/* Nav links */}
         <nav className="flex items-center gap-1">
-          <NavItem to="/explore" icon={<HiOutlineViewfinderCircle className="size-5" />} label="Explore" />
           <NavItem
-            to="/compare"
-            icon={<HiOutlineSquares2X2 className="size-5" />}
-            label="Compare"
-            count={compareCount}
+            to="/explore"
+            icon={<HiOutlineViewfinderCircle className="size-5" />}
+            label="Explore"
           />
+          {compareCount > 0 && (
+            <NavItem
+              to="/compare"
+              icon={<HiOutlineSquares2X2 className="size-5" />}
+              label="Compare"
+              count={compareCount}
+            />
+          )}
           <NavItem
             to="/shortlist"
             icon={<HiOutlineBookmark className="size-5" />}
@@ -37,7 +43,6 @@ export default function Navbar() {
             count={shortlistCount}
           />
         </nav>
-
       </div>
     </header>
   )

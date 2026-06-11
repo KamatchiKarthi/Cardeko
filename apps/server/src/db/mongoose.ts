@@ -11,11 +11,11 @@ const MONGOOSE_OPTIONS: mongoose.ConnectOptions = {
 
 export async function connectDB(): Promise<void> {
   mongoose.connection.on('connected', () =>
-    console.log(`MongoDB connected → ${mongoose.connection.host} / ${mongoose.connection.db?.databaseName}`)
+    console.log(
+      `MongoDB connected → ${mongoose.connection.host} / ${mongoose.connection.db?.databaseName}`
+    )
   )
-  mongoose.connection.on('error', (err: Error) =>
-    console.error('MongoDB error:', err.message)
-  )
+  mongoose.connection.on('error', (err: Error) => console.error('MongoDB error:', err.message))
   mongoose.connection.on('disconnected', () => console.warn('MongoDB disconnected'))
   mongoose.connection.on('reconnected', () => console.log('MongoDB reconnected'))
 

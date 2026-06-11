@@ -260,8 +260,7 @@ export function buildCompareSections(cars: ICar[]): CompareSection[] {
       fields: [
         {
           label: 'Safety rating',
-          getValue: (car) =>
-            car.safetyRatingStars ? `${car.safetyRatingStars} / 5` : null,
+          getValue: (car) => (car.safetyRatingStars ? `${car.safetyRatingStars} / 5` : null),
           compareMode: 'higher',
           numericGet: (car) => car.safetyRatingStars ?? null,
         },

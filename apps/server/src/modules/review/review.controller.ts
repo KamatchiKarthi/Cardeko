@@ -7,7 +7,7 @@ import type { CreateReviewDto, PaginationQuery } from './review.schema'
 // ── Review controllers ────────────────────────────────────────────────────────
 
 export async function getCarReviews(req: Request, res: Response) {
-  const query  = getQuery<PaginationQuery>(req)
+  const query = getQuery<PaginationQuery>(req)
   const result = await reviewService.getCarReviews(getParam(req, 'id'), query)
 
   type Meta = Record<string, string>
@@ -34,7 +34,11 @@ export async function createCarReview(req: Request, res: Response) {
   )
 
   // Strip internal fields from the response
-  const { isActive: _ia, __v: _v, ...safeReview } = review as typeof review & {
+  const {
+    isActive: _ia,
+    __v: _v,
+    ...safeReview
+  } = review as typeof review & {
     isActive?: boolean
     __v?: number
   }

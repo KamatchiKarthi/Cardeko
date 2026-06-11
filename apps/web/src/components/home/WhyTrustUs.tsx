@@ -6,9 +6,10 @@ import {
   HiOutlineTruck,
 } from 'react-icons/hi2'
 
+import HomeApiError from './HomeApiError'
+
 import { useGetHomeStatsQuery } from '@/features/cars/carsApi'
 
-import HomeApiError from './HomeApiError'
 
 function formatCarCount(count: number): string {
   return count >= 25 ? `${count}+` : String(count)
@@ -51,9 +52,7 @@ export default function WhyTrustUs() {
   const carCount = stats ? formatCarCount(stats.totalCars) : '—'
   const reviewCount = stats ? formatReviewCount(stats.totalReviews) : '—'
   const safetyCount = stats ? String(stats.fiveStarSafetyCount) : '—'
-  const priceRange = stats
-    ? `₹${stats.priceRangeMinLakhs}–${stats.priceRangeMaxLakhs}L`
-    : '—'
+  const priceRange = stats ? `₹${stats.priceRangeMinLakhs}–${stats.priceRangeMaxLakhs}L` : '—'
 
   return (
     <section className="border-t border-border bg-surface-raised py-12 sm:py-16">
@@ -62,7 +61,9 @@ export default function WhyTrustUs() {
           <p className="text-sm font-semibold uppercase tracking-wider text-brand-accent">
             Built for buyers
           </p>
-          <h2 className="mt-1 text-2xl font-bold text-text-primary sm:text-3xl">Why Trust CarDeko?</h2>
+          <h2 className="mt-1 text-2xl font-bold text-text-primary sm:text-3xl">
+            Why Trust CarDeko?
+          </h2>
           <p className="mx-auto mt-3 max-w-2xl text-sm text-text-secondary sm:text-base">
             Unbiased research, real owner voices, and safety data you can actually use — not dealer
             brochures.

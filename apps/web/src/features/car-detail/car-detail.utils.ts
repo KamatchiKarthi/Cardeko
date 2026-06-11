@@ -211,7 +211,10 @@ const REVIEW_CATEGORY_FIELDS: {
   { key: 'valueForMoney', label: 'Value' },
 ]
 
-function averageRatingValues(reviews: ICarReview[], pick: (ratings: IReviewRatings) => number | null): number {
+function averageRatingValues(
+  reviews: ICarReview[],
+  pick: (ratings: IReviewRatings) => number | null
+): number {
   const values = reviews
     .map((review) => pick(review.ratings))
     .filter((value): value is number => value !== null && value > 0)
@@ -371,7 +374,11 @@ export function buildCarSpecSections(car: ICar): CarSpecSection[] {
   addRow(powertrain, 'Engine', car.engineDisplacementCc ? `${car.engineDisplacementCc} cc` : null)
   addRow(powertrain, 'Power', car.powerBhp ? `${car.powerBhp} BHP` : null)
   addRow(powertrain, 'Torque', car.torqueNm ? `${car.torqueNm} Nm` : null)
-  addRow(powertrain, '0–100 km/h', car.acceleration0to100Sec ? `${car.acceleration0to100Sec} sec` : null)
+  addRow(
+    powertrain,
+    '0–100 km/h',
+    car.acceleration0to100Sec ? `${car.acceleration0to100Sec} sec` : null
+  )
   addRow(powertrain, 'Top speed', car.topSpeedKph ? `${car.topSpeedKph} km/h` : null)
   if (powertrain.length > 0) sections.push({ title: 'Engine & performance', rows: powertrain })
 
@@ -384,8 +391,16 @@ export function buildCarSpecSections(car: ICar): CarSpecSection[] {
 
   const efficiency: CarSpecRow[] = []
   addRow(efficiency, 'City mileage', car.mileageCityKmpl ? `${car.mileageCityKmpl} kmpl` : null)
-  addRow(efficiency, 'Highway mileage', car.mileageHighwayKmpl ? `${car.mileageHighwayKmpl} kmpl` : null)
-  addRow(efficiency, 'Combined mileage', car.mileageCombinedKmpl ? `${car.mileageCombinedKmpl} kmpl` : null)
+  addRow(
+    efficiency,
+    'Highway mileage',
+    car.mileageHighwayKmpl ? `${car.mileageHighwayKmpl} kmpl` : null
+  )
+  addRow(
+    efficiency,
+    'Combined mileage',
+    car.mileageCombinedKmpl ? `${car.mileageCombinedKmpl} kmpl` : null
+  )
   addRow(efficiency, 'Fuel tank', car.fuelTankLitres ? `${car.fuelTankLitres} L` : null)
   if (efficiency.length > 0) sections.push({ title: 'Mileage & fuel', rows: efficiency })
 
@@ -394,7 +409,11 @@ export function buildCarSpecSections(car: ICar): CarSpecSection[] {
   addRow(dimensions, 'Width', car.widthMm ? `${car.widthMm} mm` : null)
   addRow(dimensions, 'Height', car.heightMm ? `${car.heightMm} mm` : null)
   addRow(dimensions, 'Wheelbase', car.wheelbaseMm ? `${car.wheelbaseMm} mm` : null)
-  addRow(dimensions, 'Ground clearance', car.groundClearanceMm ? `${car.groundClearanceMm} mm` : null)
+  addRow(
+    dimensions,
+    'Ground clearance',
+    car.groundClearanceMm ? `${car.groundClearanceMm} mm` : null
+  )
   addRow(dimensions, 'Kerb weight', car.kerbWeightKg ? `${car.kerbWeightKg} kg` : null)
   addRow(dimensions, 'Boot space', car.bootSpaceLitres ? `${car.bootSpaceLitres} L` : null)
   addRow(dimensions, 'Seating capacity', `${car.seatingCapacity} seats`)

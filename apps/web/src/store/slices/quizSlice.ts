@@ -1,6 +1,6 @@
+import type { QuizAnswers } from '@cardeko/types'
 import { createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
-import type { QuizAnswers } from '@cardeko/types'
 
 import type { RootState } from '..'
 

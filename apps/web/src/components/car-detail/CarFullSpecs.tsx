@@ -27,7 +27,9 @@ export default function CarFullSpecs({ car }: CarFullSpecsProps) {
                   className="flex flex-col gap-0.5 px-4 py-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4"
                 >
                   <dt className="text-sm font-medium text-text-secondary">{row.label}</dt>
-                  <dd className="text-sm font-semibold text-text-primary sm:text-right">{row.value}</dd>
+                  <dd className="text-sm font-semibold text-text-primary sm:text-right">
+                    {row.value}
+                  </dd>
                 </div>
               ))}
             </dl>

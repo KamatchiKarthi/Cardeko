@@ -1,15 +1,15 @@
 import type { ICar } from '@cardeko/types'
 import { Fragment } from 'react'
 
-import CompareCarHeader from '@/components/compare/CompareCarHeader'
+import CarComparisonHeader from '@/components/compare/CarComparisonHeader'
 import { MAX_COMPARE_CARS } from '@/features/compare/compare.constants'
 import { buildCompareSections } from '@/features/compare/compare.utils'
 
-interface CompareSpecTableProps {
+interface CarComparisonTableProps {
   cars: ICar[]
 }
 
-export default function CompareSpecTable({ cars }: CompareSpecTableProps) {
+export default function CarComparisonTable({ cars }: CarComparisonTableProps) {
   const sections = buildCompareSections(cars)
   const columnCount = MAX_COMPARE_CARS + 1
 
@@ -17,7 +17,7 @@ export default function CompareSpecTable({ cars }: CompareSpecTableProps) {
     <div className="overflow-x-auto rounded-xl border border-border bg-surface shadow-sm">
       <table className="w-full min-w-[720px] border-collapse text-sm">
         <thead>
-          <CompareCarHeader cars={cars} />
+          <CarComparisonHeader cars={cars} />
         </thead>
         <tbody>
           {sections.map((section) => (
@@ -47,7 +47,9 @@ export default function CompareSpecTable({ cars }: CompareSpecTableProps) {
                         key={`${row.label}-${columnIndex}`}
                         className={[
                           'border-r border-border px-4 py-3 text-center last:border-r-0',
-                          isHighlighted ? 'bg-green-50 font-semibold text-status-success' : 'text-text-primary',
+                          isHighlighted
+                            ? 'bg-green-50 font-semibold text-status-success'
+                            : 'text-text-primary',
                         ].join(' ')}
                       >
                         {value}

@@ -1,10 +1,4 @@
-import type {
-  FuelType,
-  Priority,
-  QuizBudgetAnswer,
-  QuizStepId,
-  UseCase,
-} from '@cardeko/types'
+import type { FuelType, Priority, QuizBudgetAnswer, QuizStepId, UseCase } from '@cardeko/types'
 import { useState } from 'react'
 import { HiArrowLeft, HiArrowRight } from 'react-icons/hi2'
 import { Link, useNavigate } from 'react-router-dom'

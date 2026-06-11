@@ -51,17 +51,17 @@ export default function UpcomingLaunches() {
         {isError && <HomeApiError />}
 
         {!isError && (
-        <div className="overflow-hidden rounded-2xl border border-border bg-surface-raised px-4 sm:px-6">
-          {isLoading &&
-            Array.from({ length: UPCOMING_LIMIT }, (_, index) => (
-              <UpcomingRowSkeleton key={index} />
-            ))}
+          <div className="overflow-hidden rounded-2xl border border-border bg-surface-raised px-4 sm:px-6">
+            {isLoading &&
+              Array.from({ length: UPCOMING_LIMIT }, (_, index) => (
+                <UpcomingRowSkeleton key={index} />
+              ))}
 
-          {!isLoading &&
-            cars?.map((car, index) => (
-              <UpcomingLaunchRow key={car._id} car={car} index={index} />
-            ))}
-        </div>
+            {!isLoading &&
+              cars?.map((car, index) => (
+                <UpcomingLaunchRow key={car._id} car={car} index={index} />
+              ))}
+          </div>
         )}
       </div>
     </section>

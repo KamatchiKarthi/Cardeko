@@ -2,7 +2,12 @@ import type { Request, Response } from 'express'
 
 import { getParam, getQuery } from '../../utils/request'
 import * as carService from './car.service'
-import type { CollectionQuery, GetAllCarsQuery, PopularBrandsQuery, RecommendQuery } from './car.schema'
+import type {
+  CollectionQuery,
+  GetAllCarsQuery,
+  PopularBrandsQuery,
+  RecommendQuery,
+} from './car.schema'
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 
@@ -97,12 +102,15 @@ export async function getCarById(req: Request, res: Response) {
   res.json({ success: true, message: 'Car fetched successfully', data: car })
 }
 
-function buildRecommendResponse(results: Awaited<ReturnType<typeof carService.getRecommendations>>) {
+function buildRecommendResponse(
+  results: Awaited<ReturnType<typeof carService.getRecommendations>>
+) {
   return {
     success: true,
-    message: results.length === 0
-      ? 'No matching cars found — try adjusting your budget or preferences'
-      : `Found ${results.length} recommended car${results.length > 1 ? 's' : ''} for you`,
+    message:
+      results.length === 0
+        ? 'No matching cars found — try adjusting your budget or preferences'
+        : `Found ${results.length} recommended car${results.length > 1 ? 's' : ''} for you`,
     data: results.map((result) => ({
       ...result.car,
       _recommendScore: result.score,

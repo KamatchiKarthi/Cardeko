@@ -10,7 +10,8 @@
     "lint": "eslint src --ext .ts",
     "type-check": "tsc --noEmit",
     "clean": "rm -rf dist",
-    "seed": "ts-node-dev --transpile-only --exit-child --no-notify src/db/seed.ts"
+    "seed": "ts-node-dev --transpile-only --exit-child --no-notify src/db/seed.ts",
+    "backfill:images": "node scripts/backfill-images.mjs"
   },
   "dependencies": {
     "@cardeko/types": "*",

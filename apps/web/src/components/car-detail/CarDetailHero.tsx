@@ -1,6 +1,7 @@
 import type { ICar } from '@cardeko/types'
 import { HiCheck, HiPlus, HiTruck } from 'react-icons/hi2'
 
+import AddToCompareButton from '@/components/compare/AddToCompareButton'
 import Badge from '@/components/ui/Badge'
 import Button from '@/components/ui/Button'
 import CarImage from '@/components/ui/CarImage'
@@ -86,7 +87,7 @@ export default function CarDetailHero({ car }: CarDetailHeroProps) {
               </div>
             </div>
 
-            <div className="mt-5">
+            <div className="mt-5 flex flex-wrap gap-2">
               <Button
                 type="button"
                 variant={isShortlisted ? 'secondary' : 'primary'}
@@ -106,6 +107,7 @@ export default function CarDetailHero({ car }: CarDetailHeroProps) {
                   </>
                 )}
               </Button>
+              <AddToCompareButton carId={car._id} />
             </div>
           </div>
         </div>

@@ -1,10 +1,4 @@
-import type {
-  FuelType,
-  Priority,
-  QuizBudgetAnswer,
-  QuizStepId,
-  UseCase,
-} from '@cardeko/types'
+import type { FuelType, Priority, QuizBudgetAnswer, QuizStepId, UseCase } from '@cardeko/types'
 
 export interface QuizStepDefinition {
   id: QuizStepId

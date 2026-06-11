@@ -101,7 +101,8 @@ export function getColorSwatchClass(colorName: string, fallbackIndex: number): s
   if (match.gradient.includes('blue') || match.gradient.includes('indigo')) return 'bg-blue-600'
   if (match.gradient.includes('slate-4')) return 'bg-slate-400'
   if (match.gradient.includes('zinc')) return 'bg-zinc-800'
-  if (match.gradient.includes('emerald') || match.gradient.includes('green')) return 'bg-emerald-600'
+  if (match.gradient.includes('emerald') || match.gradient.includes('green'))
+    return 'bg-emerald-600'
   if (match.gradient.includes('amber-5')) return 'bg-amber-500'
   if (match.gradient.includes('orange') || match.gradient.includes('stone')) return 'bg-orange-700'
   if (match.gradient.includes('purple') || match.gradient.includes('violet')) return 'bg-purple-600'
@@ -142,18 +143,14 @@ export function getFeaturedTags(tags: string[] | null | undefined, limit = 3): s
   return tags.slice(0, limit)
 }
 
-const UNAVAILABLE_IMAGE_HOSTS = ['cdn.cardeko.in']
-
 export function getCarHeroImage(images: string[] | null | undefined): string | null {
   const candidate = images?.[0]?.trim()
   if (!candidate) return null
 
   try {
-    const hostname = new URL(candidate).hostname
-    if (UNAVAILABLE_IMAGE_HOSTS.includes(hostname)) return null
+    new URL(candidate)
+    return candidate
   } catch {
     return null
   }
-
-  return candidate
 }

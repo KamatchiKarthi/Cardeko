@@ -28,9 +28,7 @@ export default function HomeCarScroll({
   return (
     <div className="-mx-4 flex gap-4 overflow-x-auto px-4 pb-2 snap-x snap-mandatory sm:mx-0 sm:px-0">
       {isLoading &&
-        Array.from({ length: skeletonCount }, (_, index) => (
-          <CarPickSkeleton key={index} />
-        ))}
+        Array.from({ length: skeletonCount }, (_, index) => <CarPickSkeleton key={index} />)}
       {!isLoading && children}
     </div>
   )

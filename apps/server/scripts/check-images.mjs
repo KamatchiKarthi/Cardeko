@@ -3,25 +3,11 @@ import mongoose from 'mongoose'
 
 await mongoose.connect(process.env.MONGODB_URI)
 
-const db = mongoose.connection.db
-console.log('database:', db.databaseName)
+const car = await mongoose.connection.db.collection('cars').findOne(
+  { slug: 'maruti-suzuki-swift-zxi-plus-2024' },
+  { projection: { slug: 1, images: 1, colors: 1 } }
+)
 
-for (const name of ['cars', 'carvariants', 'test']) {
-  const exists = (await db.listCollections({ name }).toArray()).length > 0
-  if (!exists) {
-    console.log(`${name}: collection not found`)
-    continue
-  }
-
-  const withImages = await db.collection(name).countDocuments({ 'images.0': { $exists: true } })
-  const total = await db.collection(name).countDocuments()
-  const sample = await db.collection(name).findOne({ 'images.0': { $exists: true } })
-
-  console.log(`${name}: ${withImages}/${total} docs with images`)
-  if (sample) {
-    console.log(`  sample slug/name: ${sample.slug ?? sample.name}`)
-    console.log(`  images:`, sample.images)
-  }
-}
+console.log(JSON.stringify(car, null, 2))
 
 await mongoose.disconnect()

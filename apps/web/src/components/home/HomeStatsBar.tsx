@@ -7,9 +7,10 @@ import {
   HiStar,
 } from 'react-icons/hi2'
 
+import HomeApiError from './HomeApiError'
+
 import { useGetHomeStatsQuery } from '@/features/cars/carsApi'
 
-import HomeApiError from './HomeApiError'
 
 function formatCarCount(count: number): string {
   return count >= 25 ? `${count}+` : String(count)
@@ -64,9 +65,7 @@ export default function HomeStatsBar() {
   const { data: stats, isLoading, isError } = useGetHomeStatsQuery()
 
   const carCount = stats ? formatCarCount(stats.totalCars) : '—'
-  const priceRange = stats
-    ? `₹${stats.priceRangeMinLakhs}–${stats.priceRangeMaxLakhs}L`
-    : '—'
+  const priceRange = stats ? `₹${stats.priceRangeMinLakhs}–${stats.priceRangeMaxLakhs}L` : '—'
   const safetyCount = stats ? String(stats.fiveStarSafetyCount) : '—'
   const reviewCount = stats ? formatReviewCount(stats.totalReviews) : '—'
 
@@ -75,33 +74,33 @@ export default function HomeStatsBar() {
       <div className="container-page py-8 sm:py-10">
         {isError && <HomeApiError />}
         {!isError && (
-        <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4 lg:gap-6">
-          <StatItem
-            loading={isLoading}
-            icon={<HiOutlineTruck className="size-5 text-brand-accent" />}
-            value={carCount}
-            label="Cars researched"
-          />
-          <StatItem
-            loading={isLoading}
-            icon={<HiOutlineCurrencyRupee className="size-5 text-brand-accent" />}
-            value={priceRange}
-            label="Price range covered"
-          />
-          <StatItem
-            loading={isLoading}
-            icon={<HiOutlineShieldCheck className="size-5 text-brand-accent" />}
-            value={safetyCount}
-            label="5-star NCAP safety data"
-            extra={<StarRating />}
-          />
-          <StatItem
-            loading={isLoading}
-            icon={<HiOutlineChatBubbleLeftRight className="size-5 text-brand-accent" />}
-            value={reviewCount}
-            label="Real owner reviews"
-          />
-        </div>
+          <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4 lg:gap-6">
+            <StatItem
+              loading={isLoading}
+              icon={<HiOutlineTruck className="size-5 text-brand-accent" />}
+              value={carCount}
+              label="Cars researched"
+            />
+            <StatItem
+              loading={isLoading}
+              icon={<HiOutlineCurrencyRupee className="size-5 text-brand-accent" />}
+              value={priceRange}
+              label="Price range covered"
+            />
+            <StatItem
+              loading={isLoading}
+              icon={<HiOutlineShieldCheck className="size-5 text-brand-accent" />}
+              value={safetyCount}
+              label="5-star NCAP safety data"
+              extra={<StarRating />}
+            />
+            <StatItem
+              loading={isLoading}
+              icon={<HiOutlineChatBubbleLeftRight className="size-5 text-brand-accent" />}
+              value={reviewCount}
+              label="Real owner reviews"
+            />
+          </div>
         )}
       </div>
     </section>

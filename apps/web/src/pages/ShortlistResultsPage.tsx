@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react'
-import { HiArrowPath, HiScale, HiSparkles } from 'react-icons/hi2'
+import { HiArrowPath, HiSparkles } from 'react-icons/hi2'
 import { Navigate, useNavigate } from 'react-router-dom'
 
 import HomeApiError from '@/components/home/HomeApiError'
@@ -18,8 +18,7 @@ export default function ShortlistResultsPage() {
   const isComplete = useAppSelector(selectQuizComplete)
   const hasFetched = useRef(false)
 
-  const [postRecommendations, { data: cars, isLoading, isError }] =
-    usePostRecommendationsMutation()
+  const [postRecommendations, { data: cars, isLoading, isError }] = usePostRecommendationsMutation()
 
   useEffect(() => {
     if (!isComplete || !isQuizComplete(answers) || hasFetched.current) return
@@ -75,32 +74,13 @@ export default function ShortlistResultsPage() {
         {!isLoading && !isError && rankedCars.length > 0 && (
           <div className="space-y-4">
             {rankedCars.map((car, index) => (
-              <ShortlistResultCard
-                key={car._id}
-                car={car}
-                rank={index + 1}
-                answers={answers}
-              />
+              <ShortlistResultCard key={car._id} car={car} rank={index + 1} answers={answers} />
             ))}
           </div>
         )}
 
         <div className="mt-8 flex flex-col gap-3 border-t border-border pt-6 sm:flex-row sm:justify-center">
-          <Button
-            type="button"
-            variant="secondary"
-            className="gap-2"
-            onClick={() => navigate('/compare')}
-          >
-            <HiScale className="size-4" />
-            Compare shortlist
-          </Button>
-          <Button
-            type="button"
-            variant="ghost"
-            className="gap-2"
-            onClick={() => navigate('/quiz')}
-          >
+          <Button type="button" variant="ghost" className="gap-2" onClick={() => navigate('/quiz')}>
             <HiArrowPath className="size-4" />
             Refine answers
           </Button>

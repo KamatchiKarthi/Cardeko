@@ -4,7 +4,12 @@ import { AppError } from '../../middleware/errorHandler'
 import { Review } from '../review/review.model'
 import { Car } from './car.model'
 import type { ICar } from './car.model'
-import type { CollectionQuery, GetAllCarsQuery, PopularBrandsQuery, RecommendQuery } from './car.schema'
+import type {
+  CollectionQuery,
+  GetAllCarsQuery,
+  PopularBrandsQuery,
+  RecommendQuery,
+} from './car.schema'
 
 // ── Projections ───────────────────────────────────────────────────────────────
 
@@ -16,21 +21,21 @@ export const LIST_SELECT =
 // ── Constants ─────────────────────────────────────────────────────────────────
 
 const SORT_MAP: Record<string, Record<string, SortOrder>> = {
-  price_asc:  { priceExShowroom: 1 },
+  price_asc: { priceExShowroom: 1 },
   price_desc: { priceExShowroom: -1 },
-  rating:     { safetyRatingStars: -1, popularityScore: -1 },
-  newest:     { year: -1, popularityScore: -1 },
+  rating: { safetyRatingStars: -1, popularityScore: -1 },
+  newest: { year: -1, popularityScore: -1 },
   popularity: { popularityScore: -1 },
-  mileage:    { mileageCombinedKmpl: -1, popularityScore: -1 },
+  mileage: { mileageCombinedKmpl: -1, popularityScore: -1 },
 }
 
 const PREMIUM_THRESHOLD = 2_000_000 // ≥ ₹20 lakhs
-const BUDGET_THRESHOLD  = 1_000_000 // ≤ ₹10 lakhs
+const BUDGET_THRESHOLD = 1_000_000 // ≤ ₹10 lakhs
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 
 const daysAgo = (n: number) => new Date(Date.now() - n * 24 * 60 * 60 * 1000)
-const toSkip  = (page: number, size: number) => (page - 1) * size
+const toSkip = (page: number, size: number) => (page - 1) * size
 
 /** MongoDB throws code 27 when $text is used without a text index on the collection. */
 function isTextIndexMissing(err: unknown): boolean {
@@ -45,35 +50,49 @@ function isTextIndexMissing(err: unknown): boolean {
 
 export async function getAllCars(params: GetAllCarsQuery) {
   const {
-    page, pageSize, make, model, bodyType, bodyTypes, segment,
-    fuelType, fuelTypes, transmission, priceMin, priceMax,
-    seatingCapacity, seatingCapacities, safetyStarsMin, sortBy, q,
+    page,
+    pageSize,
+    make,
+    model,
+    bodyType,
+    bodyTypes,
+    segment,
+    fuelType,
+    fuelTypes,
+    transmission,
+    priceMin,
+    priceMax,
+    seatingCapacity,
+    seatingCapacities,
+    safetyStarsMin,
+    sortBy,
+    q,
   } = params
 
   const filter: FilterQuery<ICar> = { isActive: true }
 
-  if (q)            filter.$text           = { $search: q }
-  if (make)         filter.make            = { $regex: make,  $options: 'i' }
-  if (model)        filter.model           = { $regex: model, $options: 'i' }
+  if (q) filter.$text = { $search: q }
+  if (make) filter.make = { $regex: make, $options: 'i' }
+  if (model) filter.model = { $regex: model, $options: 'i' }
   if (bodyTypes?.length) {
     filter.bodyType = { $in: bodyTypes }
   } else if (bodyType) {
     filter.bodyType = bodyType
   }
-  if (segment)      filter.segment         = segment
+  if (segment) filter.segment = segment
   if (fuelTypes?.length) {
     filter.fuelType = { $in: fuelTypes }
   } else if (fuelType) {
     filter.fuelType = fuelType
   }
-  if (transmission) filter.transmission    = transmission
+  if (transmission) filter.transmission = transmission
 
   if (seatingCapacities?.length) {
     filter.seatingCapacity = { $in: seatingCapacities }
   } else if (seatingCapacity !== undefined) {
     filter.seatingCapacity = seatingCapacity
   }
-  if (safetyStarsMin  !== undefined) filter.safetyRatingStars = { $gte: safetyStarsMin }
+  if (safetyStarsMin !== undefined) filter.safetyRatingStars = { $gte: safetyStarsMin }
 
   if (priceMin !== undefined || priceMax !== undefined) {
     filter.priceExShowroom = {
@@ -93,7 +112,10 @@ export async function getAllCars(params: GetAllCarsQuery) {
     return { data, total, page, pageSize, totalPages: Math.ceil(total / pageSize) }
   } catch (err) {
     if (isTextIndexMissing(err)) {
-      throw new AppError(503, 'Text search is unavailable. Use make, model, or other filters instead.')
+      throw new AppError(
+        503,
+        'Text search is unavailable. Use make, model, or other filters instead.'
+      )
     }
     throw err
   }
@@ -127,10 +149,7 @@ export async function getPopularCars({ limit }: CollectionQuery) {
 export async function getPremiumCars({ limit }: CollectionQuery) {
   return Car.find({
     isActive: true,
-    $or: [
-      { priceExShowroom: { $gte: PREMIUM_THRESHOLD } },
-      { segment: 'luxury' },
-    ],
+    $or: [{ priceExShowroom: { $gte: PREMIUM_THRESHOLD } }, { segment: 'luxury' }],
   })
     .sort({ popularityScore: -1 })
     .limit(limit)
@@ -212,22 +231,22 @@ const MAX_SCORE = 105 // 30+25+25+15+10
 /** Maps use-case → relevant body types + fuel types used to filter candidates */
 const USE_CASE_BODY: Record<string, string[]> = {
   'daily-commute': ['hatchback', 'sedan', 'crossover'],
-  'family':        ['suv', 'minivan', 'crossover'],
-  'off-road':      ['suv'],
-  'highway':       ['sedan', 'suv', 'crossover'],
-  'city':          ['hatchback', 'sedan', 'crossover'],
-  'cargo':         ['suv', 'minivan', 'truck', 'van'],
-  'luxury':        ['sedan', 'suv', 'coupe'],
+  family: ['suv', 'minivan', 'crossover'],
+  'off-road': ['suv'],
+  highway: ['sedan', 'suv', 'crossover'],
+  city: ['hatchback', 'sedan', 'crossover'],
+  cargo: ['suv', 'minivan', 'truck', 'van'],
+  luxury: ['sedan', 'suv', 'coupe'],
 }
 
 /** Maps priority → field used for scoring bonus */
 const PRIORITY_FIELD: Record<string, keyof ICar> = {
-  safety:      'safetyRatingStars',
-  mileage:     'mileageCombinedKmpl',
+  safety: 'safetyRatingStars',
+  mileage: 'mileageCombinedKmpl',
   performance: 'powerBhp',
-  comfort:     'seatingCapacity',
-  features:    'airbagCount',
-  value:       'popularityScore',
+  comfort: 'seatingCapacity',
+  features: 'airbagCount',
+  value: 'popularityScore',
 }
 
 function scoreCarForUser(car: ICar, params: RecommendQuery): number {
@@ -270,7 +289,12 @@ function scoreCarForUser(car: ICar, params: RecommendQuery): number {
   if (params.priority) {
     const field = PRIORITY_FIELD[params.priority]
     const thresholds: Record<string, number> = {
-      safety: 4, mileage: 18, performance: 130, comfort: 5, features: 4, value: 700,
+      safety: 4,
+      mileage: 18,
+      performance: 130,
+      comfort: 5,
+      features: 4,
+      value: 700,
     }
     const val = field !== undefined ? (car[field] as number | undefined) : undefined
     if (val !== undefined && val >= (thresholds[params.priority] ?? 0)) score += 10
@@ -296,22 +320,27 @@ export async function getRecommendations(params: RecommendQuery): Promise<Recomm
   if (params.budgetMax !== undefined) priceFilter.$lte = params.budgetMax * 1.15
   if (Object.keys(priceFilter).length > 0) filter.priceExShowroom = priceFilter
   if (params.fuelType) filter.fuelType = params.fuelType
-  if (params.seating)  filter.seatingCapacity = { $gte: params.seating }
+  if (params.seating) filter.seatingCapacity = { $gte: params.seating }
 
   // Fetch candidate pool (up to 200) — scoring is fast in-process
   const candidates = await Car.find(filter)
-    .select(LIST_SELECT + ' fuelType bodyType seatingCapacity safetyRatingStars mileageCombinedKmpl powerBhp airbagCount')
+    .select(
+      LIST_SELECT +
+        ' fuelType bodyType seatingCapacity safetyRatingStars mileageCombinedKmpl powerBhp airbagCount'
+    )
     .limit(200)
     .lean()
 
   const scored: RecommendResult[] = candidates
-    .map(car => {
+    .map((car) => {
       const s = scoreCarForUser(car as ICar, params)
       return { car, score: s, matchPercent: Math.round((s / MAX_SCORE) * 100) }
     })
-    .filter(r => r.score > 0)
+    .filter((r) => r.score > 0)
 
-  scored.sort((a, b) => b.score - a.score || (b.car.popularityScore ?? 0) - (a.car.popularityScore ?? 0))
+  scored.sort(
+    (a, b) => b.score - a.score || (b.car.popularityScore ?? 0) - (a.car.popularityScore ?? 0)
+  )
 
   return scored.slice(0, 5)
 }
@@ -326,16 +355,17 @@ interface BrandAccumulator {
 }
 
 function toBrandSlug(make: string): string {
-  return make.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]/g, '')
+  return make
+    .toLowerCase()
+    .replace(/\s+/g, '-')
+    .replace(/[^\w-]/g, '')
 }
 
 export async function getPopularBrands({ bodyType, limit }: PopularBrandsQuery) {
   const filter: FilterQuery<ICar> = { isActive: true }
   if (bodyType) filter.bodyType = bodyType
 
-  const cars = await Car.find(filter)
-    .select('make model priceExShowroom popularityScore')
-    .lean()
+  const cars = await Car.find(filter).select('make model priceExShowroom popularityScore').lean()
 
   const brandMap = new Map<string, BrandAccumulator>()
 
@@ -387,7 +417,9 @@ export async function getHomeStats() {
     Review.countDocuments({ isActive: true }),
     Car.aggregate<{ min: number; max: number }>([
       { $match: { isActive: true } },
-      { $group: { _id: null, min: { $min: '$priceExShowroom' }, max: { $max: '$priceExShowroom' } } },
+      {
+        $group: { _id: null, min: { $min: '$priceExShowroom' }, max: { $max: '$priceExShowroom' } },
+      },
     ]),
   ])
 

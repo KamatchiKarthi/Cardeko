@@ -1,10 +1,6 @@
 import type { ICarSummary } from '@cardeko/types'
-import {
-  HiOutlineGlobeAlt,
-  HiOutlineLink,
-  HiOutlinePlay,
-} from 'react-icons/hi2'
 import { FaInstagram, FaLinkedinIn, FaXTwitter } from 'react-icons/fa6'
+import { HiOutlineGlobeAlt, HiOutlineLink, HiOutlinePlay } from 'react-icons/hi2'
 import { MdDirectionsCar } from 'react-icons/md'
 import { Link } from 'react-router-dom'
 
@@ -21,7 +17,6 @@ const EXPLORE_LINKS = [
 
 const TOOL_LINKS = [
   { label: 'Find my car quiz', href: '/quiz' },
-  { label: 'Compare cars', href: '/compare' },
   { label: 'My shortlist', href: '/shortlist' },
   { label: 'Browse by brand', href: '/explore' },
 ]
@@ -37,10 +32,7 @@ function PopularCarLink({ car }: { car: ICarSummary }) {
   const name = getCarDisplayName(car.make, car.model)
   return (
     <li>
-      <Link
-        to={`/cars/${car.slug}`}
-        className="text-sm text-slate-300 transition hover:text-white"
-      >
+      <Link to={`/cars/${car.slug}`} className="text-sm text-slate-300 transition hover:text-white">
         {name}
       </Link>
     </li>

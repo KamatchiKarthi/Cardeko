@@ -12,7 +12,10 @@ type ParsedReq = Request & { parsedQuery: unknown }
 export function getQuery<T>(req: Request): T {
   const parsed = (req as ParsedReq).parsedQuery
   if (parsed === undefined) {
-    throw new AppError(500, '[getQuery] parsedQuery is missing — ensure validateQuery() is applied to this route')
+    throw new AppError(
+      500,
+      '[getQuery] parsedQuery is missing — ensure validateQuery() is applied to this route'
+    )
   }
   return parsed as T
 }

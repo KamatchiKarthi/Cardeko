@@ -42,22 +42,22 @@ export default function TrendingThisWeek() {
         {isError && <HomeApiError />}
 
         {!isError && (
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {isLoading &&
-            Array.from({ length: TRENDING_LIMIT }, (_, index) => (
-              <TrendingCardSkeleton key={index} />
-            ))}
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {isLoading &&
+              Array.from({ length: TRENDING_LIMIT }, (_, index) => (
+                <TrendingCardSkeleton key={index} />
+              ))}
 
-          {!isLoading &&
-            cars?.map((car, index) => (
-              <TrendingCarCard
-                key={car._id}
-                car={car}
-                rank={index + 1}
-                maxPopularity={maxPopularity}
-              />
-            ))}
-        </div>
+            {!isLoading &&
+              cars?.map((car, index) => (
+                <TrendingCarCard
+                  key={car._id}
+                  car={car}
+                  rank={index + 1}
+                  maxPopularity={maxPopularity}
+                />
+              ))}
+          </div>
         )}
       </div>
     </section>

@@ -1,8 +1,8 @@
 import { HiOutlineStar, HiStar } from 'react-icons/hi2'
 
+import Card from '@/components/ui/Card'
 import type { ReviewSummary } from '@/features/car-detail/car-detail.utils'
 
-import Card from '@/components/ui/Card'
 
 interface CarReviewSummaryProps {
   summary: ReviewSummary
@@ -62,10 +62,15 @@ function CategoryRatingBars({ categories }: { categories: ReviewSummary['categor
   return (
     <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
       {categories.map((category) => (
-        <div key={category.key} className="rounded-lg border border-border bg-surface-raised px-3 py-2.5">
+        <div
+          key={category.key}
+          className="rounded-lg border border-border bg-surface-raised px-3 py-2.5"
+        >
           <div className="mb-1.5 flex items-center justify-between gap-2">
             <span className="text-xs font-semibold text-text-secondary">{category.label}</span>
-            <span className="text-xs font-bold text-text-primary">{category.average.toFixed(1)}</span>
+            <span className="text-xs font-bold text-text-primary">
+              {category.average.toFixed(1)}
+            </span>
           </div>
           <div className="h-1.5 overflow-hidden rounded-full bg-surface-overlay">
             <div

@@ -28,7 +28,8 @@ export default function QuizStepBar({ currentStepId, answers }: QuizStepBarProps
                   className={[
                     'flex size-9 items-center justify-center rounded-full border-2 text-xs font-bold transition',
                     isCompleted && 'border-status-success bg-status-success text-white',
-                    isCurrent && 'border-brand-accent bg-brand-accent text-white shadow-md shadow-brand-accent/30',
+                    isCurrent &&
+                      'border-brand-accent bg-brand-accent text-white shadow-md shadow-brand-accent/30',
                     isUpcoming && 'border-border bg-surface-overlay text-text-muted',
                   ]
                     .filter(Boolean)

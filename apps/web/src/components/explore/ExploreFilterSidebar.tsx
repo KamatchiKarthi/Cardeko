@@ -49,7 +49,9 @@ function FilterCheckboxGroup<T extends string | number>({
                 onChange={() => onToggle(option.value)}
                 className="size-4 rounded border-border text-brand-accent focus:ring-brand-accent"
               />
-              <span className={isChecked ? 'font-medium text-text-primary' : ''}>{option.label}</span>
+              <span className={isChecked ? 'font-medium text-text-primary' : ''}>
+                {option.label}
+              </span>
             </label>
           )
         })}

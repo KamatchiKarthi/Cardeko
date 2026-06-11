@@ -4,7 +4,7 @@ import type { ICarVariant } from '@cardeko/types'
 
 const engineSpecsSchema = new Schema(
   {
-    displacement: { type: Number },       // cc
+    displacement: { type: Number }, // cc
     cylinders: { type: Number },
     powerBhp: { type: Number },
     torqueNm: { type: Number },
@@ -13,8 +13,8 @@ const engineSpecsSchema = new Schema(
       required: true,
       enum: ['petrol', 'diesel', 'electric', 'hybrid', 'cng', 'lpg'],
     },
-    batteryKwh: { type: Number },         // EVs
-    rangeKm: { type: Number },            // EVs
+    batteryKwh: { type: Number }, // EVs
+    rangeKm: { type: Number }, // EVs
   },
   { _id: false }
 )

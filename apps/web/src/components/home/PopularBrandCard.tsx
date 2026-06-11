@@ -31,7 +31,9 @@ export default function PopularBrandCard({ brand, index }: PopularBrandCardProps
 
       <div className="flex min-w-0 flex-1 flex-col justify-between p-4">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-wider text-text-muted">Top models</p>
+          <p className="text-xs font-semibold uppercase tracking-wider text-text-muted">
+            Top models
+          </p>
           <p className="mt-1 line-clamp-2 text-sm font-semibold leading-snug text-text-primary">
             {topModelsLabel}
           </p>

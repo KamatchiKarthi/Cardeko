@@ -10,4 +10,4 @@ import { healthRouter } from './modules/health'
 export const apiRouter = Router()
 
 apiRouter.use('/health', healthRouter)
-apiRouter.use('/cars',   carRouter)
+apiRouter.use('/cars', carRouter)

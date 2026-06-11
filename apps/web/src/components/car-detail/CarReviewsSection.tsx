@@ -15,7 +15,9 @@ export default function CarReviewsSection({ reviews, total }: CarReviewsSectionP
     <Card elevated>
       <div className="mb-5 flex items-center justify-between gap-3">
         <h2 className="text-lg font-bold text-text-primary">Owner reviews</h2>
-        <span className="text-sm text-text-secondary">{total} review{total === 1 ? '' : 's'}</span>
+        <span className="text-sm text-text-secondary">
+          {total} review{total === 1 ? '' : 's'}
+        </span>
       </div>
 
       {reviews.length === 0 ? (

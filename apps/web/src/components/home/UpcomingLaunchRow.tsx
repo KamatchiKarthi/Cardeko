@@ -41,7 +41,9 @@ export default function UpcomingLaunchRow({ car, index }: UpcomingLaunchRowProps
         </div>
 
         <div className="min-w-0">
-          <h3 className="truncate text-base font-bold text-text-primary sm:text-lg">{displayName}</h3>
+          <h3 className="truncate text-base font-bold text-text-primary sm:text-lg">
+            {displayName}
+          </h3>
           <p className="mt-0.5 text-sm text-text-secondary">{launchLabel}</p>
         </div>
       </div>

@@ -1,11 +1,6 @@
 import type { QuizAnswers, QuizStepId, RecommendParams } from '@cardeko/types'
 
-import {
-  FUEL_OPTIONS,
-  PRIORITY_OPTIONS,
-  SEATING_OPTIONS,
-  USE_CASE_OPTIONS,
-} from './quiz.constants'
+import { FUEL_OPTIONS, PRIORITY_OPTIONS, SEATING_OPTIONS, USE_CASE_OPTIONS } from './quiz.constants'
 
 export function getQuizAnswerLabel(stepId: QuizStepId, answers: QuizAnswers): string | null {
   switch (stepId) {

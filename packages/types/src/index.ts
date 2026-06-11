@@ -3,13 +3,44 @@
 export type FuelType = 'petrol' | 'diesel' | 'electric' | 'hybrid' | 'cng' | 'lpg'
 export type TransmissionType = 'manual' | 'automatic' | 'amt' | 'cvt' | 'dct'
 export type DrivetrainType = 'fwd' | 'rwd' | 'awd' | '4wd'
-export type BodyType = 'sedan' | 'suv' | 'hatchback' | 'coupe' | 'convertible' | 'truck' | 'van' | 'wagon' | 'minivan' | 'crossover'
-export type CarSegment = 'micro' | 'economy' | 'compact' | 'mid-size' | 'full-size' | 'luxury' | 'sports' | 'electric'
+export type BodyType =
+  | 'sedan'
+  | 'suv'
+  | 'hatchback'
+  | 'coupe'
+  | 'convertible'
+  | 'truck'
+  | 'van'
+  | 'wagon'
+  | 'minivan'
+  | 'crossover'
+export type CarSegment =
+  | 'micro'
+  | 'economy'
+  | 'compact'
+  | 'mid-size'
+  | 'full-size'
+  | 'luxury'
+  | 'sports'
+  | 'electric'
 export type SafetyAgency = 'GLOBAL NCAP' | 'BHARAT NCAP' | 'EURO NCAP' | 'IIHS' | 'NHTSA'
-export type ReviewRatingKey = 'overall' | 'comfort' | 'performance' | 'fuelEfficiency' | 'valueForMoney' | 'maintenance'
+export type ReviewRatingKey =
+  | 'overall'
+  | 'comfort'
+  | 'performance'
+  | 'fuelEfficiency'
+  | 'valueForMoney'
+  | 'maintenance'
 export type CarSortBy = 'popularity' | 'price_asc' | 'price_desc' | 'rating' | 'newest' | 'mileage'
 export type ExploreSortTab = 'best-match' | 'price' | 'mileage' | 'safety'
-export type UseCase = 'daily-commute' | 'family' | 'off-road' | 'highway' | 'city' | 'cargo' | 'luxury'
+export type UseCase =
+  | 'daily-commute'
+  | 'family'
+  | 'off-road'
+  | 'highway'
+  | 'city'
+  | 'cargo'
+  | 'luxury'
 export type Priority = 'safety' | 'mileage' | 'performance' | 'comfort' | 'features' | 'value'
 export type ReviewSortBy = 'newest' | 'rating'
 export type QuizStepId = 'budget' | 'useCase' | 'fuel' | 'seating' | 'priority'
@@ -18,11 +49,11 @@ export type QuizStepId = 'budget' | 'useCase' | 'fuel' | 'seating' | 'priority'
 
 export interface ICarMake {
   _id: string
-  name: string        // "Toyota"
-  slug: string        // "toyota"
-  logo?: string       // CDN URL
-  country: string     // "Japan"
-  founded?: number    // 1937
+  name: string // "Toyota"
+  slug: string // "toyota"
+  logo?: string // CDN URL
+  country: string // "Japan"
+  founded?: number // 1937
   description?: string
   isActive: boolean
   createdAt: Date
@@ -33,9 +64,9 @@ export interface ICarMake {
 
 export interface ICarModel {
   _id: string
-  make: string        // ref → CarMake._id
-  name: string        // "Corolla"
-  slug: string        // "corolla"
+  make: string // ref → CarMake._id
+  name: string // "Corolla"
+  slug: string // "corolla"
   bodyType: BodyType
   segment: CarSegment
   description?: string
@@ -48,13 +79,13 @@ export interface ICarModel {
 // ─── Car Variant ──────────────────────────────────────────────────────────────
 
 export interface IEngineSpecs {
-  displacement?: number     // cc
+  displacement?: number // cc
   cylinders?: number
-  powerBhp?: number         // brake horsepower
+  powerBhp?: number // brake horsepower
   torqueNm?: number
   fuelType: FuelType
-  batteryKwh?: number       // for EVs
-  rangeKm?: number          // for EVs
+  batteryKwh?: number // for EVs
+  rangeKm?: number // for EVs
 }
 
 export interface IDimensionSpecs {
@@ -90,21 +121,21 @@ export interface ICarSpecs {
 }
 
 export interface ICarFeatures {
-  safety: string[]        // ["ABS", "6 Airbags", "ESC", "TPMS"]
-  comfort: string[]       // ["Sunroof", "Ventilated Seats"]
-  infotainment: string[]  // ["10-inch touchscreen", "Apple CarPlay"]
-  exterior: string[]      // ["LED Headlamps", "Alloy Wheels"]
-  adas?: string[]         // ["Lane Assist", "Auto Emergency Braking"]
+  safety: string[] // ["ABS", "6 Airbags", "ESC", "TPMS"]
+  comfort: string[] // ["Sunroof", "Ventilated Seats"]
+  infotainment: string[] // ["10-inch touchscreen", "Apple CarPlay"]
+  exterior: string[] // ["LED Headlamps", "Alloy Wheels"]
+  adas?: string[] // ["Lane Assist", "Auto Emergency Braking"]
 }
 
 export interface ICarVariant {
   _id: string
-  model: string           // ref → CarModel._id
-  name: string            // "VXI 1.2L AMT"
-  slug: string            // "vxi-1-2l-amt"
-  year: number            // launch/model year
-  priceMin: number        // ex-showroom min (INR)
-  priceMax: number        // ex-showroom max (INR)
+  model: string // ref → CarModel._id
+  name: string // "VXI 1.2L AMT"
+  slug: string // "vxi-1-2l-amt"
+  year: number // launch/model year
+  priceMin: number // ex-showroom min (INR)
+  priceMax: number // ex-showroom max (INR)
   specs: ICarSpecs
   features: ICarFeatures
   colors: string[]
@@ -118,15 +149,15 @@ export interface ICarVariant {
 
 export interface ISafetyRating {
   _id: string
-  variant: string           // ref → CarVariant._id
+  variant: string // ref → CarVariant._id
   agency: SafetyAgency
   testYear: number
-  overallStars: number      // 0–5
+  overallStars: number // 0–5
   adultOccupantPct?: number
   childOccupantPct?: number
   pedestrianPct?: number
   safetyAssistPct?: number
-  testedVariantLabel?: string  // e.g. "1.5L base petrol"
+  testedVariantLabel?: string // e.g. "1.5L base petrol"
   reportUrl?: string
   createdAt: Date
   updatedAt: Date
@@ -135,7 +166,7 @@ export interface ISafetyRating {
 // ─── Review ──────────────────────────────────────────────────────────────────
 
 export interface IReviewRatings {
-  overall: number           // 1–5
+  overall: number // 1–5
   comfort?: number
   performance?: number
   fuelEfficiency?: number

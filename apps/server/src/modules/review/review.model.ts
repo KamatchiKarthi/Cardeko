@@ -26,30 +26,30 @@ export interface IReview {
 
 const ratingsSchema = new Schema(
   {
-    overall:        { type: Number, required: true, min: 1, max: 5 },
-    comfort:        { type: Number, min: 1, max: 5 },
-    performance:    { type: Number, min: 1, max: 5 },
+    overall: { type: Number, required: true, min: 1, max: 5 },
+    comfort: { type: Number, min: 1, max: 5 },
+    performance: { type: Number, min: 1, max: 5 },
     fuelEfficiency: { type: Number, min: 1, max: 5 },
-    valueForMoney:  { type: Number, min: 1, max: 5 },
-    maintenance:    { type: Number, min: 1, max: 5 },
+    valueForMoney: { type: Number, min: 1, max: 5 },
+    maintenance: { type: Number, min: 1, max: 5 },
   },
   { _id: false }
 )
 
 const reviewSchema = new Schema<IReview>(
   {
-    car:             { type: String, ref: 'Car', required: true, index: true },
-    user:            { type: String, required: true, index: true },
-    ratings:         { type: ratingsSchema, required: true },
-    title:           { type: String, required: true, trim: true, maxlength: 150 },
-    body:            { type: String, required: true, trim: true, maxlength: 5000 },
-    pros:            { type: [String], default: [] },
-    cons:            { type: [String], default: [] },
+    car: { type: String, ref: 'Car', required: true, index: true },
+    user: { type: String, required: true, index: true },
+    ratings: { type: ratingsSchema, required: true },
+    title: { type: String, required: true, trim: true, maxlength: 150 },
+    body: { type: String, required: true, trim: true, maxlength: 5000 },
+    pros: { type: [String], default: [] },
+    cons: { type: [String], default: [] },
     ownershipMonths: { type: Number, min: 0 },
-    kmDriven:        { type: Number, min: 0 },
-    verified:        { type: Boolean, default: false },
-    helpfulCount:    { type: Number, default: 0 },
-    isActive:        { type: Boolean, default: true },
+    kmDriven: { type: Number, min: 0 },
+    verified: { type: Boolean, default: false },
+    helpfulCount: { type: Number, default: 0 },
+    isActive: { type: Boolean, default: true },
   },
   { timestamps: true }
 )

@@ -9,6 +9,7 @@ const envSchema = z.object({
     .pipe(z.number().min(1).max(65535)),
   MONGODB_URI: z.string().min(1, 'MONGODB_URI is required'),
   CORS_ORIGIN: z.string().default('http://localhost:3000'),
+  CAR_IMAGE_CDN_BASE: z.string().url().optional(),
 })
 
 const parsed = envSchema.safeParse(process.env)

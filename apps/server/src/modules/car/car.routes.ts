@@ -70,13 +70,21 @@ router.get('/upcoming', validateLimit, asyncHandler(carController.getUpcomingLau
  * Scoring: budget(30) + fuel(25) + useCase(25) + seating(15) + priority(10)
  * Returns top-5 cars sorted by score with matchPercent.
  */
-router.get('/recommend', validateQuery(recommendQuerySchema), asyncHandler(carController.getRecommendations))
+router.get(
+  '/recommend',
+  validateQuery(recommendQuerySchema),
+  asyncHandler(carController.getRecommendations)
+)
 
 /*
  * POST /api/cars/recommend
  * Same as GET — accepts quiz preferences in the request body.
  */
-router.post('/recommend', validateBody(recommendQuerySchema), asyncHandler(carController.postRecommendations))
+router.post(
+  '/recommend',
+  validateBody(recommendQuerySchema),
+  asyncHandler(carController.postRecommendations)
+)
 
 /*
  * GET /api/cars/stats

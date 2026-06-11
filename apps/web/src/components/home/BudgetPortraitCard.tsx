@@ -10,12 +10,12 @@ import {
   getCarHeroImage,
 } from '@/utils/car.utils'
 
-interface BudgetNetflixCardProps {
+interface BudgetPortraitCardProps {
   car: ICarSummary
   index: number
 }
 
-export default function BudgetNetflixCard({ car, index }: BudgetNetflixCardProps) {
+export default function BudgetPortraitCard({ car, index }: BudgetPortraitCardProps) {
   const primaryColor = car.colors?.[0] ?? ''
   const gradient = getCarCardGradient(primaryColor, index)
   const displayName = getCarDisplayName(car.make, car.model)

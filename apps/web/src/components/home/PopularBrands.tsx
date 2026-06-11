@@ -47,7 +47,11 @@ function BrandCardSkeleton() {
 
 export default function PopularBrands() {
   const [activeFilter, setActiveFilter] = useState<BrandFilterValue>(null)
-  const { data: brands, isLoading, isError } = useGetPopularBrandsQuery({
+  const {
+    data: brands,
+    isLoading,
+    isError,
+  } = useGetPopularBrandsQuery({
     bodyType: activeFilter,
     limit: BRANDS_LIMIT,
   })
@@ -100,15 +104,15 @@ export default function PopularBrands() {
         {isError && <HomeApiError />}
 
         {!isError && (
-        <div className="-mx-4 flex gap-4 overflow-x-auto px-4 pb-2 snap-x snap-mandatory sm:mx-0 sm:px-0">
-          {isLoading &&
-            Array.from({ length: 4 }, (_, index) => <BrandCardSkeleton key={index} />)}
+          <div className="-mx-4 flex gap-4 overflow-x-auto px-4 pb-2 snap-x snap-mandatory sm:mx-0 sm:px-0">
+            {isLoading &&
+              Array.from({ length: 4 }, (_, index) => <BrandCardSkeleton key={index} />)}
 
-          {!isLoading &&
-            brands?.map((brand, index) => (
-              <PopularBrandCard key={brand.slug} brand={brand} index={index} />
-            ))}
-        </div>
+            {!isLoading &&
+              brands?.map((brand, index) => (
+                <PopularBrandCard key={brand.slug} brand={brand} index={index} />
+              ))}
+          </div>
         )}
       </div>
     </section>
