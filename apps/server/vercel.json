@@ -1,17 +1,6 @@
 {
-  "version": 2,
-  "buildCommand": "npm run build",
-  "installCommand": "npm install --include=dev",
-  "builds": [
-    {
-      "src": "dist/app.js",
-      "use": "@vercel/node"
-    }
-  ],
-  "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "dist/app.js"
-    }
-  ]
+  "installCommand": "cd ../.. && npm install --include=dev",
+  "buildCommand": "cd ../.. && npx turbo build --filter=@cardeko/server",
+  "outputDirectory": ".",
+  "rewrites": [{ "source": "/(.*)", "destination": "/api" }]
 }

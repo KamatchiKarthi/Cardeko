@@ -11,6 +11,9 @@ async function bootstrap() {
 
   const shutdown = async (signal: string) => {
     console.log(`\n${signal} received — shutting down gracefully...`)
+    if (env.NODE_ENV === 'development') {
+      process.exit(0)
+    }
     server.close(async () => {
       await disconnectDB()
       process.exit(0)
