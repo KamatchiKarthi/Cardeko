@@ -7,6 +7,12 @@ export type BodyType = 'sedan' | 'suv' | 'hatchback' | 'coupe' | 'convertible' |
 export type CarSegment = 'micro' | 'economy' | 'compact' | 'mid-size' | 'full-size' | 'luxury' | 'sports' | 'electric'
 export type SafetyAgency = 'GLOBAL NCAP' | 'BHARAT NCAP' | 'EURO NCAP' | 'IIHS' | 'NHTSA'
 export type ReviewRatingKey = 'overall' | 'comfort' | 'performance' | 'fuelEfficiency' | 'valueForMoney' | 'maintenance'
+export type CarSortBy = 'popularity' | 'price_asc' | 'price_desc' | 'rating' | 'newest' | 'mileage'
+export type ExploreSortTab = 'best-match' | 'price' | 'mileage' | 'safety'
+export type UseCase = 'daily-commute' | 'family' | 'off-road' | 'highway' | 'city' | 'cargo' | 'luxury'
+export type Priority = 'safety' | 'mileage' | 'performance' | 'comfort' | 'features' | 'value'
+export type ReviewSortBy = 'newest' | 'rating'
+export type QuizStepId = 'budget' | 'useCase' | 'fuel' | 'seating' | 'priority'
 
 // ─── Car Make ─────────────────────────────────────────────────────────────────
 
@@ -137,10 +143,10 @@ export interface IReviewRatings {
   maintenance?: number
 }
 
-export interface IReview {
+export interface ICarReview {
   _id: string
-  variant: string           // ref → CarVariant._id
-  user: string              // ref → User._id
+  car: string
+  user: string
   ratings: IReviewRatings
   title: string
   body: string
@@ -148,11 +154,40 @@ export interface IReview {
   cons: string[]
   ownershipMonths?: number
   kmDriven?: number
-  verified: boolean         // verified owner
+  verified: boolean
+  helpfulCount: number
+  isActive: boolean
+  createdAt: string
+  updatedAt: string
+}
+
+export interface IReview {
+  _id: string
+  variant: string
+  user: string
+  ratings: IReviewRatings
+  title: string
+  body: string
+  pros: string[]
+  cons: string[]
+  ownershipMonths?: number
+  kmDriven?: number
+  verified: boolean
   helpfulCount: number
   isActive: boolean
   createdAt: Date
   updatedAt: Date
+}
+
+export interface CreateReviewPayload {
+  userId: string
+  ratings: IReviewRatings
+  title: string
+  body: string
+  pros: string[]
+  cons: string[]
+  ownershipMonths?: number
+  kmDriven?: number
 }
 
 // ─── User ─────────────────────────────────────────────────────────────────────
@@ -167,6 +202,129 @@ export interface IUser {
   isActive: boolean
   createdAt: Date
   updatedAt: Date
+}
+
+// ─── Car (denormalized document) ─────────────────────────────────────────────
+
+export interface ICar {
+  _id: string
+  make: string
+  model: string
+  variant: string
+  year: number
+  slug: string
+  priceExShowroom: number
+  priceOnRoad?: number
+  bodyType: BodyType
+  segment: CarSegment
+  fuelType: FuelType
+  transmission: TransmissionType
+  drivetrain: DrivetrainType
+  seatingCapacity: number
+  engineDisplacementCc?: number
+  powerBhp?: number
+  torqueNm?: number
+  acceleration0to100Sec?: number
+  topSpeedKph?: number
+  batteryKwh?: number
+  electricRangeKm?: number
+  mileageCityKmpl?: number
+  mileageHighwayKmpl?: number
+  mileageCombinedKmpl?: number
+  fuelTankLitres?: number
+  lengthMm?: number
+  widthMm?: number
+  heightMm?: number
+  wheelbaseMm?: number
+  groundClearanceMm?: number
+  kerbWeightKg?: number
+  bootSpaceLitres?: number
+  safetyRatingStars?: number
+  safetyRatingAgency?: SafetyAgency
+  safetyRatingYear?: number
+  airbagCount?: number
+  features: string[]
+  adasFeatures: string[]
+  tags: string[]
+  popularityScore: number
+  colors: string[]
+  images: string[]
+  isActive: boolean
+  launchedAt?: string
+  discontinuedAt?: string
+  createdAt: string
+  updatedAt: string
+}
+
+export interface ICarSummary {
+  _id: string
+  make: string
+  model: string
+  variant: string
+  year: number
+  slug: string
+  priceExShowroom: number
+  priceOnRoad?: number
+  popularityScore: number
+  bodyType: BodyType
+  fuelType: FuelType
+  tags: string[]
+  colors: string[]
+  images: string[]
+  launchedAt?: string
+}
+
+export interface ICarListItem extends ICarSummary {
+  seatingCapacity?: number
+  transmission?: TransmissionType
+  mileageCombinedKmpl?: number
+  mileageCityKmpl?: number
+  powerBhp?: number
+  torqueNm?: number
+  engineDisplacementCc?: number
+  safetyRatingStars?: number
+  airbagCount?: number
+}
+
+export interface IRecommendedCar extends ICarSummary {
+  _recommendScore: number
+  _matchPercent: number
+  safetyRatingStars?: number
+  seatingCapacity?: number
+  mileageCombinedKmpl?: number
+}
+
+export interface IPopularBrand {
+  make: string
+  slug: string
+  modelCount: number
+  startingPrice: number
+  topModels: string[]
+  totalPopularity: number
+}
+
+export interface IHomeStats {
+  totalCars: number
+  priceRangeMinLakhs: number
+  priceRangeMaxLakhs: number
+  fiveStarSafetyCount: number
+  totalReviews: number
+}
+
+// ─── Quiz ────────────────────────────────────────────────────────────────────
+
+export interface QuizBudgetAnswer {
+  budgetMin: number
+  budgetMax: number
+  label: string
+}
+
+export interface QuizAnswers {
+  budget: QuizBudgetAnswer | null
+  useCase: UseCase | null
+  fuelType: FuelType | null
+  seating: number | null
+  priority: Priority | null
 }
 
 // ─── API Helpers ─────────────────────────────────────────────────────────────
@@ -187,19 +345,55 @@ export interface PaginatedResponse<T> extends ApiResponse<T[]> {
 // ─── Search / Filter ─────────────────────────────────────────────────────────
 
 export interface CarSearchParams {
+  page?: number
+  pageSize?: number
   make?: string
   model?: string
   bodyType?: BodyType
+  bodyTypes?: BodyType[]
   segment?: CarSegment
   fuelType?: FuelType
+  fuelTypes?: FuelType[]
   transmission?: TransmissionType
-  yearMin?: number
-  yearMax?: number
   priceMin?: number
   priceMax?: number
   seatingCapacity?: number
+  seatingCapacities?: number[]
   safetyStarsMin?: number
+  sortBy?: CarSortBy
+  q?: string
+}
+
+export interface ExploreFilters {
+  priceMin: number
+  priceMax: number
+  bodyTypes: BodyType[]
+  fuelTypes: FuelType[]
+  seatingCapacities: number[]
+  make: string
+}
+
+export interface RecommendParams {
+  budgetMin?: number
+  budgetMax?: number
+  fuelType?: FuelType
+  useCase?: UseCase
+  seating?: number
+  priority?: Priority
+}
+
+export interface ReviewListParams {
+  carId: string
   page?: number
   pageSize?: number
-  sortBy?: 'price_asc' | 'price_desc' | 'rating' | 'newest'
+  sortBy?: ReviewSortBy
+}
+
+export interface CollectionLimitParams {
+  limit?: number
+}
+
+export interface PopularBrandsParams {
+  limit?: number
+  bodyType?: BodyType | null
 }

@@ -2,7 +2,7 @@ import type { Request, Response } from 'express'
 
 import { getParam, getQuery } from '../../utils/request'
 import * as carService from './car.service'
-import type { CollectionQuery, GetAllCarsQuery } from './car.schema'
+import type { CollectionQuery, GetAllCarsQuery, PopularBrandsQuery, RecommendQuery } from './car.schema'
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 
@@ -21,9 +21,9 @@ function buildMeta(total: number, page: number, totalPages: number): Meta | null
 // ── Car controllers ───────────────────────────────────────────────────────────
 
 export async function getAllCars(req: Request, res: Response) {
-  const query  = getQuery<GetAllCarsQuery>(req)
+  const query = getQuery<GetAllCarsQuery>(req)
   const result = await carService.getAllCars(query)
-  const meta   = buildMeta(result.total, query.page, result.totalPages)
+  const meta = buildMeta(result.total, query.page, result.totalPages)
 
   res.json({
     success: true,
@@ -69,7 +69,65 @@ export async function getBudgetCars(req: Request, res: Response) {
   })
 }
 
+export async function getUpcomingLaunches(req: Request, res: Response) {
+  const data = await carService.getUpcomingLaunches(getQuery<CollectionQuery>(req))
+  res.json({
+    success: true,
+    message: data.length === 0 ? 'No upcoming launches' : 'Upcoming launches',
+    data,
+  })
+}
+
+export async function getPopularBrands(req: Request, res: Response) {
+  const data = await carService.getPopularBrands(getQuery<PopularBrandsQuery>(req))
+  res.json({
+    success: true,
+    message: data.length === 0 ? 'No brands found' : 'Popular brands fetched successfully',
+    data,
+  })
+}
+
+export async function getHomeStats(_req: Request, res: Response) {
+  const data = await carService.getHomeStats()
+  res.json({ success: true, message: 'Home stats fetched successfully', data })
+}
+
 export async function getCarById(req: Request, res: Response) {
   const car = await carService.getCarById(getParam(req, 'id'))
   res.json({ success: true, message: 'Car fetched successfully', data: car })
+}
+
+function buildRecommendResponse(results: Awaited<ReturnType<typeof carService.getRecommendations>>) {
+  return {
+    success: true,
+    message: results.length === 0
+      ? 'No matching cars found — try adjusting your budget or preferences'
+      : `Found ${results.length} recommended car${results.length > 1 ? 's' : ''} for you`,
+    data: results.map((result) => ({
+      ...result.car,
+      _recommendScore: result.score,
+      _matchPercent: result.matchPercent,
+    })),
+    meta: {
+      scoringBreakdown: {
+        budget: '30 pts — price within range',
+        fuel: '25 pts — fuel type match',
+        useCase: '25 pts — body type fits use case',
+        seating: '15 pts — seating capacity ≥ requested',
+        priority: '10 pts — car excels in your priority field',
+      },
+    },
+  }
+}
+
+export async function getRecommendations(req: Request, res: Response) {
+  const query = getQuery<RecommendQuery>(req)
+  const results = await carService.getRecommendations(query)
+  res.json(buildRecommendResponse(results))
+}
+
+export async function postRecommendations(req: Request, res: Response) {
+  const body = req.body as RecommendQuery
+  const results = await carService.getRecommendations(body)
+  res.json(buildRecommendResponse(results))
 }

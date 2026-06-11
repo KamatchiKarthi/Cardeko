@@ -21,7 +21,7 @@ Cardeko is a **car research platform** that helps confused buyers find the right
 
 ## Project Overview
 Full-stack car research monorepo (Turborepo + npm workspaces).
-- **Web**: Next.js 14 App Router — `apps/web`
+- **Web**: Vite + React 18 + TypeScript — `apps/web`
 - **Server**: Express + TypeScript + MongoDB — `apps/server`
 - **Shared packages**: `packages/types`, `packages/eslint-config`, `packages/prettier-config`
 
@@ -35,6 +35,62 @@ npm run format       # prettier write
 ```
 
 Run a single workspace: `npm run dev --workspace=apps/server`
+
+## Web Architecture (`apps/web/src/`)
+```
+main.tsx              ← Vite entry: <Provider store> → <App />
+App.tsx               ← BrowserRouter + Routes
+styles/globals.css    ← Tailwind directives + CSS design tokens (:root vars)
+store/
+  index.ts            ← Redux store, RootState, AppDispatch, typed hooks
+  api/index.ts        ← RTK Query createApi (tagTypes: Car, Review, CarMake, CarModel)
+  slices/             ← compareSlice, shortlistSlice
+features/
+  cars/carsApi.ts     ← all /cars collection + recommend + detail hooks
+  reviews/reviewsApi.ts ← getCarReviews, createReview
+components/home/      ← HeroSection, HomeStatsBar, TrendingThisWeek, PopularBrands, etc.
+layouts/
+  RootLayout.tsx      ← sticky header + <Outlet /> + SiteFooter
+pages/
+  HomePage.tsx        ← full home flow (hero → stats → trending → brands → upcoming → premium → budget)
+  NotFoundPage.tsx    ← 404
+components/ui/
+  Button.tsx          ← variant: primary/secondary/ghost/danger; size: sm/md/lg; loading state
+  Card.tsx            ← padded + elevated props
+  Badge.tsx           ← variant: default/accent/success/warning/error/info
+```
+
+**Design token flow**: CSS custom properties defined in `globals.css :root` → consumed by `tailwind.config.ts` color/radius/shadow keys → used as Tailwind utility classes in components.
+
+**Dev proxy**: Vite proxies `/api/*` → `http://localhost:<PORT>` where `PORT` is read from `apps/server/.env` (defaults to `3001`). Restart the Vite dev server after changing `PORT`.
+
+**Adding a new page:**
+1. Create `src/pages/<Name>Page.tsx`
+2. Add `<Route path="/<path>" element={<NamePage />} />` in `App.tsx`
+
+**Adding a new API feature:**
+1. Create `src/features/<name>/<name>Api.ts` using `baseApi.injectEndpoints()`
+2. Export typed hooks from the same file
+
+## Cars API (`/api/cars`)
+
+| Method | URL | Query / Body | Description |
+|---|---|---|---|
+| GET | `/cars` | See `CarSearchParams` in `packages/types` | Filtered + paginated car list |
+| GET | `/cars/popular` | `limit` (1–50, default 10) | All-time top by popularity |
+| GET | `/cars/trending` | `limit` | Top cars updated in last 7 days |
+| GET | `/cars/premium` | `limit` | Cars ≥ ₹20L or luxury segment |
+| GET | `/cars/budget` | `limit` | Cars ≤ ₹10L |
+| GET | `/cars/upcoming` | `limit` | Future launch dates / newest fallback |
+| GET | `/cars/stats` | — | Platform summary (counts, price range, safety) |
+| GET | `/cars/brands/popular` | `limit`, `bodyType` | Brands ranked by popularity with top models |
+| GET | `/cars/recommend` | `RecommendParams` | Top-5 cars scored by preferences (`_matchPercent` on each) |
+| GET | `/cars/:id` | — | Full car detail (increments popularity) |
+| GET | `/cars/:id/reviews` | `page`, `pageSize`, `sortBy` (newest\|rating) | Paginated reviews |
+| POST | `/cars/:id/reviews` | `CreateReviewPayload` | Submit review (409 if duplicate userId) |
+
+**Frontend hooks** (all in `features/cars/carsApi.ts` + `features/reviews/reviewsApi.ts`):
+`useGetCarsQuery`, `useGetPopularCarsQuery`, `useGetTrendingCarsQuery`, `useGetPremiumCarsQuery`, `useGetBudgetCarsQuery`, `useGetUpcomingLaunchesQuery`, `useGetHomeStatsQuery`, `useGetPopularBrandsQuery`, `useGetRecommendationsQuery`, `useGetCarByIdQuery`, `useGetCarReviewsQuery`, `useCreateReviewMutation`
 
 ## Server Architecture (`apps/server/src/`)
 ```

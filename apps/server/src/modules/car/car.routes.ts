@@ -1,16 +1,24 @@
 import { Router } from 'express'
 
-import { validateParam, validateQuery } from '../../middleware/validate'
+import { validateBody, validateParam, validateQuery } from '../../middleware/validate'
 import { asyncHandler } from '../../utils/asyncHandler'
 import { reviewRouter } from '../review/review.routes'
 import * as carController from './car.controller'
-import { collectionQuerySchema, getAllCarsQuerySchema, mongoIdSchema } from './car.schema'
+import {
+  collectionQuerySchema,
+  getAllCarsQuerySchema,
+  carIdOrSlugSchema,
+  mongoIdSchema,
+  popularBrandsQuerySchema,
+  recommendQuerySchema,
+} from './car.schema'
 
 const router = Router()
 
 // ── Reusable guards ───────────────────────────────────────────────────────────
 
-const validateId    = validateParam('id', mongoIdSchema)
+const validateId = validateParam('id', mongoIdSchema)
+const validateCarIdOrSlug = validateParam('id', carIdOrSlugSchema)
 const validateLimit = validateQuery(collectionQuerySchema)
 
 // ── Collection endpoints ──────────────────────────────────────────────────────
@@ -26,7 +34,7 @@ router.get('/', validateQuery(getAllCarsQuerySchema), asyncHandler(carController
 
 /*
  * GET /api/cars/trending[?limit=10]
- * Top by popularityScore updated in the last 30 days.
+ * Top by popularityScore updated in the last 7 days.
  * Falls back to all-time popular when no recent activity.
  */
 router.get('/trending', validateLimit, asyncHandler(carController.getTrendingCars))
@@ -39,7 +47,7 @@ router.get('/popular', validateLimit, asyncHandler(carController.getPopularCars)
 
 /*
  * GET /api/cars/premium[?limit=10]
- * Cars ≥ ₹25 lakhs ex-showroom or in the luxury segment.
+ * Cars ≥ ₹20 lakhs ex-showroom or in the luxury segment.
  */
 router.get('/premium', validateLimit, asyncHandler(carController.getPremiumCars))
 
@@ -49,13 +57,50 @@ router.get('/premium', validateLimit, asyncHandler(carController.getPremiumCars)
  */
 router.get('/budget', validateLimit, asyncHandler(carController.getBudgetCars))
 
+/*
+ * GET /api/cars/upcoming[?limit=10]
+ * Cars with a future launch date, or newest models as fallback.
+ */
+router.get('/upcoming', validateLimit, asyncHandler(carController.getUpcomingLaunches))
+
+/*
+ * GET /api/cars/recommend
+ * Personalized car recommendations scored by user preferences.
+ * Query: budgetMin, budgetMax, useCase, fuelType, seating, priority
+ * Scoring: budget(30) + fuel(25) + useCase(25) + seating(15) + priority(10)
+ * Returns top-5 cars sorted by score with matchPercent.
+ */
+router.get('/recommend', validateQuery(recommendQuerySchema), asyncHandler(carController.getRecommendations))
+
+/*
+ * POST /api/cars/recommend
+ * Same as GET — accepts quiz preferences in the request body.
+ */
+router.post('/recommend', validateBody(recommendQuerySchema), asyncHandler(carController.postRecommendations))
+
+/*
+ * GET /api/cars/stats
+ * Platform summary for home page — car count, price range, NCAP safety, reviews.
+ */
+router.get('/stats', asyncHandler(carController.getHomeStats))
+
+/*
+ * GET /api/cars/brands/popular[?limit=12&bodyType=suv]
+ * Brands ranked by total popularity, with top models and starting price.
+ */
+router.get(
+  '/brands/popular',
+  validateQuery(popularBrandsQuerySchema),
+  asyncHandler(carController.getPopularBrands)
+)
+
 // ── Document endpoints (:id must follow all named routes) ─────────────────────
 
 /*
  * GET /api/cars/:id
  * Full car detail. Increments popularityScore (non-blocking).
  */
-router.get('/:id', validateId, asyncHandler(carController.getCarById))
+router.get('/:id', validateCarIdOrSlug, asyncHandler(carController.getCarById))
 
 /*
  * Nested review routes — mounted AFTER /:id so the param is available.
