@@ -12,7 +12,8 @@
     "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\"",
     "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,json,md}\"",
     "type-check": "turbo type-check",
-    "clean": "turbo clean"
+    "clean": "turbo clean",
+    "start": "node apps/server/dist/index.js"
   },
   "devDependencies": {
     "prettier": "^3.2.5",
@@ -23,8 +24,5 @@
     "node": ">=18.0.0",
     "npm": ">=9.0.0"
   },
-  "packageManager": "npm@10.5.0",
-  "dependencies": {
-    "mongodb": "^7.3.0"
-  }
+  "packageManager": "npm@10.5.0"
 }
