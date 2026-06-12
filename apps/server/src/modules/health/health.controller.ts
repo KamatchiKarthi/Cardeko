@@ -1,8 +1,13 @@
 import type { Request, Response } from 'express'
 
-import { getDBStatus } from '../../db/mongoose'
+import { connectDB, getDBStatus, getLastDBError } from '../../db/mongoose'
 
-export function getHealth(_req: Request, res: Response) {
+export async function getHealth(_req: Request, res: Response) {
+  // Serverless cold starts can miss the module-load connect — retry on demand
+  if (getDBStatus() === 'disconnected') {
+    await connectDB().catch(() => {})
+  }
+
   const dbStatus = getDBStatus()
   const isHealthy = dbStatus === 'connected'
   const mem = process.memoryUsage()
@@ -20,6 +25,7 @@ export function getHealth(_req: Request, res: Response) {
       database: {
         status: dbStatus,
         healthy: isHealthy,
+        lastError: getLastDBError(),
       },
     },
     memory: {

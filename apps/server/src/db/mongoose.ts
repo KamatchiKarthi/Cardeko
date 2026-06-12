@@ -9,6 +9,12 @@ const MONGOOSE_OPTIONS: mongoose.ConnectOptions = {
   maxPoolSize: 10,
 }
 
+let lastDBError: string | null = null
+
+export function getLastDBError(): string | null {
+  return lastDBError
+}
+
 export async function connectDB(): Promise<void> {
   mongoose.connection.on('connected', () =>
     console.log(
@@ -21,8 +27,10 @@ export async function connectDB(): Promise<void> {
 
   try {
     await mongoose.connect(env.MONGODB_URI, MONGOOSE_OPTIONS)
+    lastDBError = null
   } catch (err) {
     const message = err instanceof Error ? err.message : String(err)
+    lastDBError = message
     if (message.includes('ECONNREFUSED') || message.includes('querySrv')) {
       console.error('\n[DB] Connection refused — check:')
       console.error('  1. MongoDB Atlas → Network Access → IP Whitelist (add 0.0.0.0/0 for dev)')
